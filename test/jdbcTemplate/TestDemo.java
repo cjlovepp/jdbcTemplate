@@ -31,7 +31,7 @@ public class TestDemo {
 	public void TestGetHomework(){
 		//获取配置文件上下文
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
-		//获取bean
+		//获取Bean
 		HomeWorkDao homeWork = context.getBean(HomeWorkDao.class);
 		List<Map<String, Object>> homeWorkList = homeWork.findALL();
 		Iterator iterator = homeWorkList.iterator();
