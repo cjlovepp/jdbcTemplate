@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
+		
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+		<property name="locations"> 
+			<list> 
+				<value>classpath:jdbc.properties</value>
+			</list> 
+		</property>
+	</bean>
+	
+	<bean id="springDSN" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${datasource.driverClassName}"/>
+		<property name="url" value="${datasource.url}" />
+		<property name="username" value="${datasource.username}" />
+		<property name="password" value="${datasource.password}" />
+	</bean>
+	
+	 <bean id="jdbcTemplate"
+        class="org.springframework.jdbc.core.JdbcTemplate" abstract="false"
+        lazy-init="false" autowire="default">
+        <property name="dataSource">
+            <ref bean="springDSN" />
+        </property>
+    </bean>
+    
+    
+    <!-- 使用注解方式，开启扫描 -->
+    <context:component-scan base-package="com.coddy" use-default-filters="false">
+		<context:include-filter type="regex" expression="com.coddy.dao.*"/>
+	</context:component-scan>
+
+	<!-- 通过配置文集配置的方式进行注入 -->
+    <!-- <bean id="homeWorkDao" class="com.coddy.dao.HomeWorkDao">
+       <property name="jdbcT">
+          <ref bean="jdbcTemplate" />
+       </property>
+    </bean> -->
+	
+</beans>
